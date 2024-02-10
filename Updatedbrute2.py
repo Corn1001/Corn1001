@@ -47,17 +47,10 @@ print("[*] Trying: %s" % password)
 
 responses = browser.open(post_url)
 
-for form in browser.forms():
-    if 'email' in form.attrs['id']:
-        browser.form = form
-        browser.form['email'] = email
-        break
+browser.select_form(nr=0)  # Assuming the login form is the first form on the page
 
-for form in browser.forms():
-    if 'pass' in form.attrs['id']:
-        browser.form = form
-        browser.form['pass'] = password
-        break
+browser.form['email'] = email
+browser.form['pass'] = password
 
 response = browser.submit()
 response_data = response.read()
