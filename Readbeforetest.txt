@@ -1,0 +1,6 @@
+Im now working on fixing Updatebrute2.py
+you may incounter some issues cause its
+broken and not working, please read this
+first before trying other scripts cause
+i input the errors that the scripts that
+i have.
